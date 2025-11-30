@@ -126,7 +126,7 @@ const HomePage = () => {
             </div>
 
             {/* CTA Section */}
-            <div className="py-20 px-4 bg-gradient-to-r from-orange-500 to-orange-600">
+            <div className="py-20 px-4 bg-linear-to-r from-orange-500 to-orange-600">
                 <div className="max-w-4xl mx-auto text-center">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}

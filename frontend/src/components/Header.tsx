@@ -4,19 +4,24 @@ import MainNav from "./MainNav"
 
 const Header = () => {
     return (
-        <div className="border-b-2 border-b-orange-500 py-6">
-            <div className="container mx-auto flex justify-between items-center">
-                <Link to="/" className="text-3xl font-bold tracking-tight text-orange-500">
-                    Foodly.com
+        <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-orange-200 shadow-sm">
+            <div className="container mx-auto flex items-center justify-between px-4 py-4">
+                <Link
+                    to="/"
+                    className="text-2xl md:text-3xl font-extrabold tracking-tight text-orange-500 hover:text-orange-600 transition"
+                >
+                    Foodly<span className="text-zinc-800">.com</span>
                 </Link>
+
                 <div className="md:hidden">
                     <MobileNav />
                 </div>
+
                 <div className="hidden md:block">
                     <MainNav />
                 </div>
             </div>
-        </div>
+        </header>
     )
 }
 
