@@ -25,7 +25,7 @@ const UserNameMenu = () => {
                     <Button onClick={() =>
                         logout({
                             logoutParams: {
-                                returnTo: window.location.origin,
+                                returnTo: import.meta.env.VITE_AUTH0_CALLBACK_URL,
                             },
                         })
                     }

@@ -13,7 +13,7 @@ const MobileNavLinks = () => {
             <Button onClick={() =>
                 logout({
                     logoutParams: {
-                        returnTo: window.location.origin,
+                        returnTo: import.meta.env.VITE_AUTH0_CALLBACK_URL,
                     },
                 })
             } className="flex items-center px-3 font-bold hover:bg-gray-500"
