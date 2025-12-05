@@ -18,27 +18,28 @@ export const jwtCheck = auth({
     tokenSigningAlg: "RS256",
 });
 
-export const jwtParse = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
+export const jwtParse = async (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers;
 
     if (!authorization || !authorization.startsWith("Bearer ")) {
+        console.log("JWT PARSE: sem Authorization");
         return res.sendStatus(401);
     }
 
-    // Bearer lshdflshdjkhvjkshdjkvh34h5k3h54jkh
     const token = authorization.split(" ")[1];
 
     try {
         const decoded = jwt.decode(token) as jwt.JwtPayload;
+        console.log("JWT PARSE decoded:", decoded);
+
         const auth0Id = decoded.sub;
+        console.log("JWT PARSE auth0Id:", auth0Id);
 
         const user = await User.findOne({ auth0Id });
+        console.log("JWT PARSE user encontrado:", user);
 
         if (!user) {
+            console.log("JWT PARSE: user não encontrado");
             return res.sendStatus(401);
         }
         
@@ -50,6 +51,7 @@ export const jwtParse = async (
         req.userId = user._id.toString();
         next();
     } catch (error) {
+        console.error("JWT PARSE ERRO:", error);
         return res.sendStatus(401);
     }
 };
