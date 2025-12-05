@@ -25,8 +25,10 @@ const createCurrentUser = async (req: Request, res: Response) => {
             return res.status(200).send()
         }
 
-        const newUser = new User(req.body)
-        await newUser.save()
+        // const newUser = new User(req.body)
+        // await newUser.save()
+        
+        const newUser = await User.create({ auth0Id, email: req.body.email });
 
         res.status(201).json(newUser.toObject())
     } catch (error) {
