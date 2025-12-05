@@ -10,7 +10,7 @@ const MobileNav = () => {
 
     return (
         <Sheet>
-            <SheetTrigger>
+            <SheetTrigger className="cursor-pointer">
                 <Menu className="text-orange-500 " />
             </SheetTrigger>
 
@@ -32,7 +32,7 @@ const MobileNav = () => {
                     ) : (
                         <Button
                             onClick={() => loginWithRedirect()}
-                            className="flex-1 font-bold bg-orange-500"
+                            className="flex-1 font-bold bg-orange-500 cursor-pointer"
                         >
                             Log In
                         </Button>
