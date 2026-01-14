@@ -11,11 +11,23 @@ const AuthCallbackPage = () => {
     const hasCreatedUser = useRef(false);
 
     useEffect(() => {
-        if (user?.sub && user?.email && !hasCreatedUser.current) {
-            createUser({ auth0Id: user.sub, email: user.email });
+        const persistUserAndRedirect = async () => {
+            if (!user?.sub || !user?.email || hasCreatedUser.current) {
+                return;
+            }
+
             hasCreatedUser.current = true;
-        }
-        navigate("/");
+
+            try {
+                await createUser({ auth0Id: user.sub, email: user.email });
+            } catch (error) {
+                console.error("Failed to create user", error);
+            } finally {
+                navigate("/");
+            }
+        };
+
+        void persistUserAndRedirect();
     }, [createUser, navigate, user]);
 
     return <>Loading...</>;

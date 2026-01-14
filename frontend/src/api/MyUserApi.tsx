@@ -3,9 +3,24 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "sonner";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:7000";
+
+const MOCK_AUTH = import.meta.env.VITE_MOCK_AUTH === "true";
+
+const mockUser: User = {
+  _id: "mock-id",
+  email: "dev@example.com",
+  name: "Dev User",
+  addressLine1: "",
+  city: "",
+  country: "",
+};
 
 export const useGetMyUser = () => {
+  if (MOCK_AUTH) {
+    return { currentUser: mockUser, isLoading: false };
+  }
+
   const { getAccessTokenSilently } = useAuth0();
 
   const getMyUserRequest = async (): Promise<User> => {
@@ -86,6 +101,16 @@ type UpdateMyUserRequest = {
 };
 
 export const useUpdateMyUser = () => {
+  if (MOCK_AUTH) {
+    const updateUser = async (formData: UpdateMyUserRequest) => {
+      // merge into mock (no persistence)
+      Object.assign(mockUser, formData);
+      return mockUser;
+    };
+
+    return { updateUser, isLoading: false };
+  }
+
   const { getAccessTokenSilently } = useAuth0();
 
   const updateMyUserRequest = async (formData: UpdateMyUserRequest) => {
