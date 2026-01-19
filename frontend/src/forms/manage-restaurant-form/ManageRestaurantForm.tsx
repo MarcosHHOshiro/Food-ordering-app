@@ -8,6 +8,7 @@ import DetailsSection from "./DetailsSection";
 import { Separator } from "@radix-ui/react-separator";
 import CuisinesSection from "./CuisinesSection";
 import MenuSection from "./MenuSection";
+import ImageSection from "./ImageSection";
 
 const formSchema = z.object({
     restaurantName: z.string().min(1, "Restaurant name is required"),
