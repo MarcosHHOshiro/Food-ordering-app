@@ -9,6 +9,7 @@ import { Separator } from "@radix-ui/react-separator";
 import CuisinesSection from "./CuisinesSection";
 import MenuSection from "./MenuSection";
 import ImageSection from "./ImageSection";
+import type { Restaurant } from "@/types/types";
 
 const formSchema = z.object({
     restaurantName: z.string().min(1, "Restaurant name is required"),
@@ -35,11 +36,12 @@ type RestaurantFormValues = z.input<typeof formSchema>;
 type RestaurantFormData = z.output<typeof formSchema>;
 
 type Props = {
+    restaurant?: Restaurant;
     onSave?: (restaurantFormData: FormData) => void;
     isLoading?: boolean;
 }
 
-const ManageRestaurantForm = ({ onSave = () => { }, isLoading = false }: Props) => {
+const ManageRestaurantForm = ({ onSave, isLoading = false, restaurant }: Props) => {
     const form = useForm<RestaurantFormValues, any, RestaurantFormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
