@@ -10,6 +10,7 @@ import CuisinesSection from "./CuisinesSection";
 import MenuSection from "./MenuSection";
 import ImageSection from "./ImageSection";
 import type { Restaurant } from "@/types/types";
+import { useEffect } from "react";
 
 const formSchema = z.object({
     restaurantName: z.string().min(1, "Restaurant name is required"),
@@ -41,7 +42,7 @@ type Props = {
     isLoading?: boolean;
 }
 
-const ManageRestaurantForm = ({ onSave, isLoading = false, restaurant }: Props) => {
+const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
     const form = useForm<RestaurantFormValues, any, RestaurantFormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -55,6 +56,26 @@ const ManageRestaurantForm = ({ onSave, isLoading = false, restaurant }: Props) 
             imageFile: undefined,
         }
     });
+
+    useEffect(() => {
+        if (!restaurant) return;
+
+        const deliveryPriceFormatted = parseInt((restaurant.deliveryPrice / 100).toFixed(2));
+
+        const menuItemsFormatted = restaurant.menuItems.map((item) => ({
+            ...item,
+            price: parseInt((item.price / 100).toFixed(2)),
+        }));
+
+        const updatedRestaurant = {
+            ...restaurant,
+            deliveryPrice: deliveryPriceFormatted,
+            menuItems: menuItemsFormatted,
+        }
+
+        form.reset(updatedRestaurant);
+
+    }, [form, restaurant]);
 
     const onSubmit = (formDataJson: RestaurantFormData) => {
         const formData = new FormData();
@@ -76,7 +97,7 @@ const ManageRestaurantForm = ({ onSave, isLoading = false, restaurant }: Props) 
 
         formData.append("imageFile", formDataJson.imageFile);
 
-        onSave(formData);
+        // onSave(formData);
     };
 
     return (

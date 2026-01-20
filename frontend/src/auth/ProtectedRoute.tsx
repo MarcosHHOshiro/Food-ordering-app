@@ -5,10 +5,15 @@ const ProtectedRoute = () => {
     const { isAuthenticated, isLoading } = useAuth0();
 
     if (isLoading) {
-        return <div>Loading...</div>; // ou um spinner
+        return null;
     }
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+    if (!isAuthenticated) {
+        return <Outlet />;
+    }
+
+    // return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+    return <Navigate to="/" replace />;
 }
 
 export default ProtectedRoute
