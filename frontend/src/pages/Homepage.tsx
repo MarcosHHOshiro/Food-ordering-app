@@ -3,8 +3,11 @@ import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
 
 const HomePage = () => {
+
     return (
         <div className="flex flex-col gap-12">
+            {/* <SearchBar placeHolder="Search by City or Town" onSubmit={handleSearchSubmit} /> */}
+
             {/* How It Works Section */}
             <div className="py-16 px-4 bg-white">
                 <div className="max-w-7xl mx-auto">
