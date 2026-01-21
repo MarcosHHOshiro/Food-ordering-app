@@ -46,7 +46,10 @@ const Hero = () => {
                             {/* Search and CTA row */}
                             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                                 <div className="flex-1">
-                                    <SearchBar placeHolder="Search by city or town" onSubmit={() => { handleSearchSubmit }} />
+                                    <SearchBar
+                                        placeHolder="Search by city or town"
+                                        onSubmit={handleSearchSubmit}
+                                    />
                                 </div>
 
                                 <motion.div whileHover={{ y: -4, boxShadow: '0 10px 25px rgba(0,0,0,0.15)' }} transition={{ type: 'spring', stiffness: 300 }}>
