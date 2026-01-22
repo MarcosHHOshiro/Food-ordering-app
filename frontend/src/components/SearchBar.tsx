@@ -5,6 +5,7 @@ import z from "zod";
 import { Form, FormControl, FormField, FormItem } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { useEffect } from "react";
 
 const formSchema = z.object({
     searchQuery: z.string().min(1, "Search query is required"),
@@ -17,12 +18,20 @@ type Props = {
     placeHolder?: string;
     onReset?: () => void;
     transparent?: boolean;
+    searchQuery?: string;
 }
 
-const SearchBar = ({ onSubmit, placeHolder, onReset, transparent = false }: Props) => {
+const SearchBar = ({ onSubmit, placeHolder, onReset, transparent = false, searchQuery }: Props) => {
     const form = useForm<SearchForm>({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            searchQuery: searchQuery || '',
+        },
     });
+
+    useEffect(() => {
+        form.reset({ searchQuery })
+    }, [form, searchQuery])
 
     const handleReset = () => {
         form.reset({
@@ -63,12 +72,14 @@ const SearchBar = ({ onSubmit, placeHolder, onReset, transparent = false }: Prop
                         )}
                     />
 
-                    {form.formState.isDirty && (
-                        <button type="button" onClick={handleReset} className={transparent ? "flex items-center justify-center w-8 h-8 rounded-full text-white/80 hover:bg-white/10" : "flex items-center justify-center w-8 h-8 rounded-full text-gray-500 hover:bg-gray-100"}>
-                            <X size={16} />
-                        </button>
-                    )}
-
+                    <button
+                        type="button"
+                        onClick={handleReset}
+                        className={transparent ? "flex items-center justify-center w-8 h-8 rounded-full text-white/80 hover:bg-white/10" : "flex items-center justify-center w-8 h-8 rounded-full text-gray-500 hover:bg-gray-100"}>
+                        <X size={16}
+                        />
+                        Reset
+                    </button>
                     <Button type="submit" className={transparent ? "ml-1 rounded-full bg-orange-500/90 hover:translate-y-[-2px] text-white px-4 py-2" : "ml-1 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2"}>Search</Button>
                 </div>
             </form>
