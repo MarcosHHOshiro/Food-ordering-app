@@ -11,28 +11,18 @@ const searchRestaurants = async (req: Request, res: Response) => {
         const page = parseInt(req.query.page as string) || 1;
 
         let query: any = {};
+        const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-        query['city'] = new RegExp(city, 'i');
-        const cityCheck = await Restaurant.countDocuments(query);
-
-        if (cityCheck === 0) {
-            return res.status(404).json({
-                data: [],
-                pagination: {
-                    total: 0,
-                    page: 1,
-                    pages: 1,
-                }
-            });
-        }
+        // match city (escape to avoid regex syntax issues)
+        query['city'] = new RegExp(escapeRegex(city), 'i');
 
         if (selectedCuisines) {
-            const cuisinesArray = selectedCuisines.split(',').map((cuisine) => new RegExp(cuisine, 'i'));
+            const cuisinesArray = selectedCuisines.split(',').map((cuisine) => new RegExp(escapeRegex(cuisine), 'i'));
             query['cuisines'] = { $all: cuisinesArray };
         }
 
         if (searchQuery) {
-            const searchRegex = new RegExp(searchQuery, 'i');
+            const searchRegex = new RegExp(escapeRegex(searchQuery), 'i');
             query['$or'] = [
                 { restaurantName: searchRegex },
                 { cuisines: { $in: [searchRegex] } },
