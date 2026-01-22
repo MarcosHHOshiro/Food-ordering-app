@@ -19,9 +19,10 @@ type Props = {
     onReset?: () => void;
     transparent?: boolean;
     searchQuery?: string;
+    className?: string;
 }
 
-const SearchBar = ({ onSubmit, placeHolder, onReset, transparent = false, searchQuery }: Props) => {
+const SearchBar = ({ onSubmit, placeHolder, onReset, transparent = false, searchQuery, className }: Props) => {
     const form = useForm<SearchForm>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -43,9 +44,12 @@ const SearchBar = ({ onSubmit, placeHolder, onReset, transparent = false, search
         }
     }
 
-    const containerClass = transparent
-        ? `max-w-3xl mx-auto flex items-center gap-3 px-4 py-3 rounded-full bg-white/10 border ${form.formState.errors.searchQuery ? 'border-red-200' : 'border-white/20'} shadow-sm text-white`
-        : `max-w-3xl mx-auto flex items-center gap-3 px-4 py-3 rounded-full bg-white/90 border ${form.formState.errors.searchQuery ? 'border-red-200' : 'border-gray-100'} shadow-md`;
+    const wrapperBase = className ?? 'max-w-3xl mx-auto';
+    const borderClass = form.formState.errors.searchQuery ? 'border-red-200' : (transparent ? 'border-white/20' : 'border-gray-100');
+    const bgClass = transparent ? 'bg-white/10' : 'bg-white/90';
+    const shadowClass = transparent ? 'shadow-sm text-white' : 'shadow-md';
+
+    const containerClass = `${wrapperBase} flex items-center gap-3 px-4 py-3 rounded-full ${bgClass} border ${borderClass} ${shadowClass}`;
 
     return (
         <Form {...form}>

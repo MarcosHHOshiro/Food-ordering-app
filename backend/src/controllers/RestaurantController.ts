@@ -7,7 +7,7 @@ const searchRestaurants = async (req: Request, res: Response) => {
 
         const searchQuery = (req.query.searchQuery as string) || '';
         const selectedCuisines = (req.query.selectedCuisines as string) || '';
-        const sortOption = req.query.sortOption as string || 'lastUpdated';
+        const sortOption = req.query.sortOption as string || 'lastUpdate';
         const page = parseInt(req.query.page as string) || 1;
 
         let query: any = {};
@@ -28,7 +28,7 @@ const searchRestaurants = async (req: Request, res: Response) => {
 
         if (selectedCuisines) {
             const cuisinesArray = selectedCuisines.split(',').map((cuisine) => new RegExp(cuisine, 'i'));
-            query['cuisine'] = { $all: cuisinesArray };
+            query['cuisines'] = { $all: cuisinesArray };
         }
 
         if (searchQuery) {
