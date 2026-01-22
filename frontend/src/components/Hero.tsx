@@ -29,21 +29,18 @@ const Hero = () => {
             {/* Content */}
             <div className="relative z-10 w-full h-full flex items-center">
                 <div className="container mx-auto px-4">
-                    <motion.div
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.7, ease: 'easeOut' }}
-                        className="max-w-3xl"
-                    >
+                    <div className="max-w-3xl">
                         <div className="bg-transparent backdrop-blur-sm p-6 rounded-2xl sm:rounded-3xl">
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight mb-2 max-w-lg ">
-                                Hot meals delivered to your door, fast.
-                            </h1>
-                            <p className="text-sm sm:text-base text-white/85 font-light mb-4 max-w-md">
-                                Order from local restaurants and get fresh food in minutes.
-                            </p>
+                            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: 'easeOut' }}>
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight mb-2 max-w-lg ">
+                                    Hot meals delivered to your door, fast.
+                                </h1>
+                                <p className="text-sm sm:text-base text-white/85 font-light mb-4 max-w-md">
+                                    Order from local restaurants and get fresh food in minutes.
+                                </p>
+                            </motion.div>
 
-                            {/* Search and CTA row */}
+                            {/* Search and CTA row (renders immediately) */}
                             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                                 <div className="flex-1">
                                     <SearchBar
@@ -60,7 +57,7 @@ const Hero = () => {
                                 </motion.div>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
         </section>
