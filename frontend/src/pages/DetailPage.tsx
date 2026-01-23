@@ -1,8 +1,9 @@
 import { useGetRestaurant } from "@/api/RestaurantApi";
+import CheckoutButton from "@/components/CheckoutButton";
 import MenuItem from "@/components/MenuItem";
 import OrderSummary from "@/components/OrderSummary";
 import RestaurantInfo from "@/components/RestaurantInfo";
-import { Card } from "@/components/ui/card";
+import { Card, CardFooter } from "@/components/ui/card";
 import type { MenuItem as MenuItemType } from "@/types/types";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import { useState } from "react";
@@ -19,7 +20,10 @@ const DetailPage = () => {
     const { restaurantId } = useParams()
     const { restaurant, isLoading } = useGetRestaurant(restaurantId);
 
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+        const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
+        return storedCartItems ? JSON.parse(storedCartItems) : [];
+    });
 
     const addToCart = (menuItem: MenuItemType) => {
         setCartItems((prevCartItems) => {
@@ -46,6 +50,11 @@ const DetailPage = () => {
                 ]
             }
 
+            sessionStorage.setItem(
+                `cartItems-${restaurantId}`,
+                JSON.stringify(updatedCartItems)
+            );
+
             return updatedCartItems;
         })
     }
@@ -55,6 +64,11 @@ const DetailPage = () => {
             const updatedCartItems = prevCartItems.filter(
                 (item) => cartItem._id !== item._id
             )
+
+            sessionStorage.setItem(
+                `cartItems-${restaurantId}`,
+                JSON.stringify(updatedCartItems)
+            );
 
             return updatedCartItems
         })
@@ -91,6 +105,9 @@ const DetailPage = () => {
                             cartItems={cartItems}
                             removeFromCart={removeFromCart}
                         />
+                        <CardFooter>
+                            <CheckoutButton />
+                        </CardFooter>
                     </Card>
                 </div>
             </div>
