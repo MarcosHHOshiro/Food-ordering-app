@@ -1,5 +1,22 @@
 import { Request, Response } from 'express';
 import Restaurant from '../models/restaurant';
+import { console } from 'inspector/promises';
+
+const getRestaurant = async (req: Request, res: Response) => {
+    try {
+        const { restaurantId } = req.params;
+
+        const restaurant = await Restaurant.findById(restaurantId);
+        if (!restaurant) {
+            return res.status(404).send({ message: "Restaurant not found" });
+        }
+
+        res.json(restaurant);
+    } catch (error) {
+        console.error("Error fetching restaurant:", error);
+        res.status(500).send({ message: "Internal Server Error" });
+    }
+}
 
 const searchRestaurants = async (req: Request, res: Response) => {
     try {
@@ -57,4 +74,5 @@ const searchRestaurants = async (req: Request, res: Response) => {
 
 export default {
     searchRestaurants,
+    getRestaurant
 };
