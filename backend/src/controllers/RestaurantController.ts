@@ -20,7 +20,7 @@ const getRestaurant = async (req: Request, res: Response) => {
 
 const searchRestaurants = async (req: Request, res: Response) => {
     try {
-        const { city } = req.params;
+        const city = req.params.city as string;
 
         const searchQuery = (req.query.searchQuery as string) || '';
         const selectedCuisines = (req.query.selectedCuisines as string) || '';
