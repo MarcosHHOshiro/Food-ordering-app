@@ -76,7 +76,7 @@ const createCheckoutSession = async (req: Request, res: Response) => {
 
         if (!restaurant) {
             throw new Error("Restaurant not found");
-        }
+        } 
 
         const newOrder = new Order({
             restaurant: restaurant,
