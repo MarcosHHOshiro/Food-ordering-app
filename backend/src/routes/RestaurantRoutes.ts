@@ -24,4 +24,4 @@ router.get("/search/:city",
     RestaurantController.searchRestaurants
 )
 
-export default router
+export default router;
