@@ -27,6 +27,29 @@ export type Restaurant = {
     lastUpdated: string,
 }
 
+export type OrderStatus = "placed" | "pending_payment" | "paid" | "inProgress" | "outForDelivery" | "delivered"
+
+export type Order = {
+    _id: string,
+    restaurant: Restaurant,
+    user: User,
+    cartItems: {
+        menuItemId: string;
+        name: string;
+        quantity: number;
+    }[]
+    deliveryDetails: {
+        name: string
+        addressLLine1: string
+        city: string
+        email: string
+    }
+    totalAmount: number,
+    status: OrderStatus,
+    createdAt: string,
+    restaurantId: string,
+}
+
 export type RestaurantSearchResponse = {
     data: Restaurant[];
     pagination: {
