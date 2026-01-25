@@ -79,6 +79,14 @@ const createCheckoutSession = async (req: Request, res: Response) => {
     try {
         const checkoutSessionRequest: CheckoutSessionRequest = req.body;
 
+        // Basic validation of incoming payload
+        if (!checkoutSessionRequest?.restaurantId) {
+            return res.status(400).json({ message: "restaurantId is required" });
+        }
+        if (!Array.isArray(checkoutSessionRequest.cartItems) || !checkoutSessionRequest.cartItems.length) {
+            return res.status(400).json({ message: "cartItems is required" });
+        }
+
         const restaurant = await Restaurant.findById(checkoutSessionRequest.restaurantId);
         if (!restaurant) {
             throw new Error("Restaurant not found");
@@ -95,24 +103,33 @@ const createCheckoutSession = async (req: Request, res: Response) => {
 
         const lineItems = createLineItems(checkoutSessionRequest, restaurant.menuItems);
 
-        // ✅ salva antes de criar sessão (evita webhook chegar e não achar order)
+        // save order before creating session (prevents webhook arriving before order exists)
         await newOrder.save();
 
-        const session = await createSession(
-            lineItems,
-            newOrder._id.toString(),
-            restaurant.deliveryPrice,
-            restaurant._id.toString()
-        );
+        let session;
+        try {
+            session = await createSession(
+                lineItems,
+                newOrder._id.toString(),
+                restaurant.deliveryPrice,
+                restaurant._id.toString()
+            );
+        } catch (stripeErr: any) {
+            console.error("Stripe create session error:", stripeErr?.message ?? stripeErr);
+            // include stripe raw message when available but avoid leaking secrets
+            const errMessage = stripeErr?.raw?.message ?? stripeErr?.message ?? "Error creating stripe session";
+            return res.status(502).json({ message: errMessage });
+        }
 
-        if (!session.url) {
+        if (!session || !session.url) {
+            console.error("Stripe session missing url", { session });
             return res.status(500).json({ message: "Error creating stripe session" });
         }
 
         return res.json({ url: session.url });
     } catch (error: any) {
-        console.log(error);
-        return res.status(500).json({ message: error?.raw?.message ?? error.message });
+        console.error("createCheckoutSession error:", error?.message ?? error);
+        return res.status(500).json({ message: error?.raw?.message ?? error.message ?? "Internal server error" });
     }
 };
 

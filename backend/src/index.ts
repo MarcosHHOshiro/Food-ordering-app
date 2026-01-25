@@ -18,6 +18,18 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// Validate critical environment variables early to fail fast with clear messages
+const requiredEnvs = [
+    "STRIPE_API_KEY",
+    "FRONTEND_URL",
+];
+const missing = requiredEnvs.filter((k) => !process.env[k]);
+if (missing.length) {
+    console.error(`Missing required environment variables: ${missing.join(", ")}`);
+    // don't start the server if critical config is missing
+    process.exit(1);
+}
+
 const app = express();
 
 app.use(cors());
