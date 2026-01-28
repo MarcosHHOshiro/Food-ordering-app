@@ -40,7 +40,7 @@ export type Order = {
     }[]
     deliveryDetails: {
         name: string
-        addressLLine1: string
+        addressLine1: string
         city: string
         email: string
     }
