@@ -9,10 +9,11 @@ const ProtectedRoute = () => {
     }
 
     if (!isAuthenticated) {
-        return <Navigate to="/" replace />;
+        return <Outlet />;
     }
 
-    return <Outlet />;
-};
+    return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
+    // return <Navigate to="/" replace />;
+}
 
 export default ProtectedRoute
